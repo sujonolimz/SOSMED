@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 
 namespace SOSMED_API.Helpers
@@ -7,38 +8,14 @@ namespace SOSMED_API.Helpers
     {
         private readonly string _connectionString;
 
-        public SqlServerConnector(string connectionString)
+        public SqlServerConnector(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public void ExecuteNonQuery(string query)
+        public SqlConnection GetConnection()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                using (var command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public DataTable ExecuteQuery(string query)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                using (var command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    var dataTable = new DataTable();
-                    using (var reader = command.ExecuteReader())
-                    {
-                        dataTable.Load(reader);
-                    }
-                    return dataTable;
-                }
-            }
+            return new SqlConnection(_connectionString);
         }
     }
 }
