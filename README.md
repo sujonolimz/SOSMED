@@ -1,18 +1,15 @@
 # SOSMED
 
----How to setup---
-1. Restore Data SOSMED.bak in folder Database to Microsoft SQL Server 2019 or latest
-2. Change connnection string in SOSMED API > appsettings.json
-   line of code below:
-   - change Data Source to actual server (where Database is restrored)
-   - change User Id & Password in destination server
+## Social Application Documentation
 
-    "ConnectionStrings": {
-  "DefaultConnection": "Data Source=DESKTOP-2EDHVVN\\SQLEXPRESS;Initial Catalog=SOSMED;User Id=sa;Password=dinopro;TrustServerCertificate=True"
-  },
+* Learn how to setup Database and config setting in
+[How to setup](https://www.notion.so/Social-Media-Application-Documentation-d42300a027e345278a049ebc5f4874e4?pvs=4#d9e7e7c2d3d54ddb84ce683f2a5267ff)
 
----How to run---
-1. open API project file using visual studio 2022 in folder SOSMED API > SOSMED AP.sln
-2. click start project
-Note:
-if appsettings.json already configure ConnnectionStrings, should be running success
+* Learn
+[How to run API Project](https://www.notion.so/Social-Media-Application-Documentation-d42300a027e345278a049ebc5f4874e4?pvs=4#ec09aa6b23f34c329e9961784acffffd)
+
+* For more information about available API, go to
+[How to use API](https://www.notion.so/Social-Media-Application-Documentation-d42300a027e345278a049ebc5f4874e4?pvs=4#47a7cb074dd044a990a950acc7d0397d)
+
+
+Thank you 
