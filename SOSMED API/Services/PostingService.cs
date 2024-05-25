@@ -7,9 +7,9 @@ namespace SOSMED_API.Services
     public interface IPostingService
     {
         List<PostingModel> GetPostingData();
-        //bool InsertPostingData(PostingModel _postingModel);
-        //bool UpdatePostingData(PostingModel _postingModel);
-        //bool DeletePostingData(string PostingID);
+        bool InsertPostingData(PostingModel _postingModel);
+        bool UpdatePostingData(PostingModel _postingModel);
+        bool DeletePostingData(string PostingID);
     }
 
     public class PostingService : IPostingService
@@ -40,6 +40,85 @@ namespace SOSMED_API.Services
             {
                 throw;
             }
+        }
+
+        public bool InsertPostingData(PostingModel _postingModel)
+        {
+            bool success = false;
+
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = @"Insert into TPosting (Title, Description, CreatedBy, CreatedDate)
+                                values (@Title, @Description, @CreatedBy, CURRENT_TIMESTAMP) ";
+
+                    var result = con.Execute(sql, _postingModel);
+
+                    if (result > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return success;
+        }
+
+        public bool UpdatePostingData(PostingModel _postingModel)
+        {
+            bool success = false;
+
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = @"update TPosting set Title = @Title, Description = @Description, UpdatedBy = @UpdatedBy, UpdatedDate = CURRENT_TIMESTAMP where PostingID = @PostingID ";
+
+                    var result = con.Execute(sql, _postingModel);
+
+                    if (result > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return success;
+        }
+
+        public bool DeletePostingData(string postingID)
+        {
+            bool success = false;
+
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = @"delete from TPosting where PostingID = @PostingID ";
+
+                    var result = con.Execute(sql, new { PostingID = postingID });
+
+                    if (result > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return success;
         }
     }
 }

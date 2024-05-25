@@ -31,7 +31,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select UserID, UserName, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser";
+                    string sql = "Select UserID, UserName, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser";
 
                     datalist = con.Query<UserModel>(sql).AsList();
                     return datalist;
@@ -52,8 +52,8 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = @"Insert into TUser (UserID, UserName, Password, GroupID, PostLimitID, CreatedBy, CreatedDate)
-                                values (@UserID, @UserName, PWDENCRYPT(@Password), @GroupID, @PostLimitID, @CreatedBy, CURRENT_TIMESTAMP) ";
+                    string sql = @"Insert into TUser (UserID, UserName, Password, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate)
+                                values (@UserID, @UserName, PWDENCRYPT(@Password), @Dept, @GroupID, @PostLimitID, @CreatedBy, CURRENT_TIMESTAMP) ";
 
                     var result = con.Execute(sql, _userModel);
 
@@ -85,6 +85,11 @@ namespace SOSMED_API.Services
                     if (!_userModel.UserName.IsNullOrEmpty())
                     {
                         sql += ", UserName = @UserName ";
+                    }
+
+                    if (!_userModel.Dept.IsNullOrEmpty())
+                    {
+                        sql += ", Dept = @Dept ";
                     }
 
                     if (!_userModel.GroupID.IsNullOrEmpty())

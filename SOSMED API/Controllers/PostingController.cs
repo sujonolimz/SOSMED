@@ -23,5 +23,65 @@ namespace SOSMED_API.Controllers
 
             return Ok(dataTable);
         }
+
+        [HttpPost]
+        [Route("InsertData")]
+        public IActionResult InsertPostingData(PostingModel postingModel)
+        {
+            try
+            {
+                bool isSuccess = _postingService.InsertPostingData(postingModel);
+                if (isSuccess)
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            // default return statement for cases where no exception is caught
+            return StatusCode(500, "An unexpected error occurred.");
+        }
+
+        [HttpPost]
+        [Route("UpdateData")]
+        public IActionResult UpdatePostingData(PostingModel postingModel)
+        {
+            try
+            {
+                bool isSuccess = _postingService.UpdatePostingData(postingModel);
+                if (isSuccess)
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            // default return statement for cases where no exception is caught
+            return StatusCode(500, "An unexpected error occurred.");
+        }
+
+        [HttpDelete]
+        [Route("DeleteData")]
+        public IActionResult DeletePostingData(string postingID)
+        {
+            try
+            {
+                bool isSuccess = _postingService.DeletePostingData(postingID);
+                if (isSuccess)
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            // default return statement for cases where no exception is caught
+            return StatusCode(500, "An unexpected error occurred.");
+        }
     }
 }
