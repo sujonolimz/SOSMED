@@ -3,20 +3,13 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.SqlServer.Server;
 using SOSMED_API.Helpers;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
 using System.Data;
 
 namespace SOSMED_API.Services
 {
-    public interface IFormService
-    {
-        List<FormModel> GetFormData();
-        bool InsertFormData(FormModel _formModel);
-        bool UpdateFormData(FormModel _formModel);
-        bool DeleteFormData(string formID);
-    }
-
-    public class FormService : IFormService
+    public class FormService : IForm
     {
         private readonly SqlServerConnector _sqlserverconnector;
 

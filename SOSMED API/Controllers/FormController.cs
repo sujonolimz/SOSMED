@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.SqlServer.Server;
-using SOSMED_API.Helpers;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
-using SOSMED_API.Services;
-using System.Data;
-using System.Text.Json.Nodes;
 
 namespace SOSMED_API.Controllers
 {
@@ -12,13 +9,14 @@ namespace SOSMED_API.Controllers
     [Route("api/[controller]")]
     public class FormController : ControllerBase
     {
-        private readonly IFormService _formService;
+        private readonly IForm _formService;
 
-        public FormController(IFormService formService)
+        public FormController(IForm formService)
         {
             _formService = formService;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetData")]  
         public IActionResult GetFormData()
@@ -28,6 +26,7 @@ namespace SOSMED_API.Controllers
             return Ok(dataTable);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("InsertData")]
         public IActionResult InsertFormData(FormModel formModel)
@@ -48,6 +47,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("UpdateData")]
         public IActionResult UpdateFormData(FormModel formModel)
@@ -68,6 +68,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteData")]
         public IActionResult DeleteFormData(string formID)

@@ -1,18 +1,11 @@
 ﻿using Dapper;
 using SOSMED_API.Helpers;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
 
 namespace SOSMED_API.Services
 {
-    public interface IPostingService
-    {
-        List<PostingModel> GetPostingData();
-        bool InsertPostingData(PostingModel _postingModel);
-        bool UpdatePostingData(PostingModel _postingModel);
-        bool DeletePostingData(string PostingID);
-    }
-
-    public class PostingService : IPostingService
+    public class PostingService : IPosting
     {
         private readonly SqlServerConnector _sqlserverconnector;
 

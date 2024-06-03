@@ -1,18 +1,11 @@
 ﻿using Dapper;
 using SOSMED_API.Helpers;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
 
 namespace SOSMED_API.Services
 {
-    public interface IPostLimitService
-    {
-        List<PostLimitModel> GetPostLimitData();
-        bool InsertPostLimitData(PostLimitModel _postLimitModel);
-        bool UpdatePostLimitData(PostLimitModel _postLimitModel);
-        bool DeletePostLimitData(string postLimitID);
-    }
-
-    public class PostLimitService : IPostLimitService
+    public class PostLimitService : IPostLimit
     {
         private readonly SqlServerConnector _sqlserverconnector;
 

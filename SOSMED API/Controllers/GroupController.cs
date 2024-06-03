@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
-using SOSMED_API.Services;
 
 namespace SOSMED_API.Controllers
 {
@@ -8,13 +9,14 @@ namespace SOSMED_API.Controllers
     [Route("api/[controller]")]
     public class GroupController : ControllerBase
     {
-        private readonly IGroupService _groupService;
+        private readonly IGroup _groupService;
 
-        public GroupController(IGroupService groupService)
+        public GroupController(IGroup groupService)
         {
             _groupService = groupService;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetData")]
         public IActionResult GetGroupData()
@@ -24,6 +26,7 @@ namespace SOSMED_API.Controllers
             return Ok(dataTable);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("InsertData")]
         public IActionResult InsertGroupData(GroupModel groupModel)
@@ -44,6 +47,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("UpdateData")]
         public IActionResult UpdateGroupData(GroupModel groupModel)
@@ -64,6 +68,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteData")]
         public IActionResult DeleteGroupData(string groupID)

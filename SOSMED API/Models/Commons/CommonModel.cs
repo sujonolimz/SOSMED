@@ -1,4 +1,4 @@
-﻿namespace SOSMED_API.Models
+﻿namespace SOSMED_API.Models.Commons
 {
     public class CommonModel
     {

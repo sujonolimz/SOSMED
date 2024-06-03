@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
-using SOSMED_API.Services;
 
 namespace SOSMED_API.Controllers
 {
@@ -8,13 +9,14 @@ namespace SOSMED_API.Controllers
     [Route("api/[controller]")]
     public class PostingController : ControllerBase
     {
-        private readonly IPostingService _postingService;
+        private readonly IPosting _postingService;
 
-        public PostingController(IPostingService postingService)
+        public PostingController(IPosting postingService)
         {
             _postingService = postingService;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetData")]
         public IActionResult GetFormData()
@@ -24,6 +26,7 @@ namespace SOSMED_API.Controllers
             return Ok(dataTable);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("InsertData")]
         public IActionResult InsertPostingData(PostingModel postingModel)
@@ -44,6 +47,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("UpdateData")]
         public IActionResult UpdatePostingData(PostingModel postingModel)
@@ -64,6 +68,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteData")]
         public IActionResult DeletePostingData(string postingID)

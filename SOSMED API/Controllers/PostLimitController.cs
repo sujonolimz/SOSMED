@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
-using SOSMED_API.Services;
 
 namespace SOSMED_API.Controllers
 {
@@ -8,13 +9,14 @@ namespace SOSMED_API.Controllers
     [Route("api/[controller]")]
     public class PostLimitController : ControllerBase
     {
-        private readonly IPostLimitService _postLimitService;
+        private readonly IPostLimit _postLimitService;
 
-        public PostLimitController(IPostLimitService postLimitService)
+        public PostLimitController(IPostLimit postLimitService)
         {
             _postLimitService = postLimitService;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetData")]
         public IActionResult GetPostLimitData()
@@ -24,6 +26,7 @@ namespace SOSMED_API.Controllers
             return Ok(dataTable);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("InsertData")]
         public IActionResult InsertPostLimitData(PostLimitModel postLimitModel)
@@ -44,6 +47,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("UpdateData")]
         public IActionResult UpdatePostLimitData(PostLimitModel postLimitModel)
@@ -64,6 +68,7 @@ namespace SOSMED_API.Controllers
             return StatusCode(500, "An unexpected error occurred.");
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteData")]
         public IActionResult DeletePostLimitData(string postLimitID)

@@ -1,4 +1,6 @@
-﻿namespace SOSMED_API.Models
+﻿using SOSMED_API.Models.Commons;
+
+namespace SOSMED_API.Models
 {
     public class GroupAccessModel : CommonModel
     {

@@ -1,19 +1,12 @@
 ﻿using Dapper;
 using Microsoft.IdentityModel.Tokens;
 using SOSMED_API.Helpers;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
 
 namespace SOSMED_API.Services
 {
-    public interface IUserService
-    {
-        List<UserModel> GetUserData();
-        bool InsertUserData(UserModel _userModel);
-        bool UpdateUserData(UserModel _userModel);
-        bool DeleteUserData(string userID);
-    }
-
-    public class UserService : IUserService
+    public class UserService : IUser
     {
         private readonly SqlServerConnector _sqlserverconnector;
 

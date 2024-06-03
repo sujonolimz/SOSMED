@@ -1,18 +1,11 @@
 ﻿using Dapper;
 using SOSMED_API.Helpers;
+using SOSMED_API.Interface;
 using SOSMED_API.Models;
 
 namespace SOSMED_API.Services
 {
-    public interface IGroupService
-    {
-        List<GroupModel> GetGroupData();
-        bool InsertGroupData(GroupModel _groupModel);
-        bool UpdateGroupData(GroupModel _groupModel);
-        bool DeleteGroupData(string groupID);
-    }
-
-    public class GroupService : IGroupService
+    public class GroupService : IGroup
     {
         private readonly SqlServerConnector _sqlserverconnector;
 
