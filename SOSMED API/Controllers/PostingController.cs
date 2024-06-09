@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Writers;
 using SOSMED_API.Interface;
 using SOSMED_API.Models;
 
@@ -21,9 +22,8 @@ namespace SOSMED_API.Controllers
         [Route("GetData")]
         public IActionResult GetFormData()
         {
-            List<PostingModel> dataTable = _postingService.GetPostingData();
-
-            return Ok(dataTable);
+            var result = _postingService.GetPostingData();
+            return Ok(result);
         }
 
         [Authorize]
@@ -31,20 +31,8 @@ namespace SOSMED_API.Controllers
         [Route("InsertData")]
         public IActionResult InsertPostingData(PostingModel postingModel)
         {
-            try
-            {
-                bool isSuccess = _postingService.InsertPostingData(postingModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _postingService.InsertPostingData(postingModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -52,20 +40,8 @@ namespace SOSMED_API.Controllers
         [Route("UpdateData")]
         public IActionResult UpdatePostingData(PostingModel postingModel)
         {
-            try
-            {
-                bool isSuccess = _postingService.UpdatePostingData(postingModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _postingService.UpdatePostingData(postingModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -73,20 +49,8 @@ namespace SOSMED_API.Controllers
         [Route("DeleteData")]
         public IActionResult DeletePostingData(string postingID)
         {
-            try
-            {
-                bool isSuccess = _postingService.DeletePostingData(postingID);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _postingService.DeletePostingData(postingID);
+            return Ok(result);
         }
     }
 }

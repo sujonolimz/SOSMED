@@ -2,6 +2,9 @@
 using SOSMED_API.Helpers;
 using SOSMED_API.Interface;
 using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
+
 
 namespace SOSMED_API.Services
 {
@@ -14,31 +17,95 @@ namespace SOSMED_API.Services
             _sqlserverconnector = sqlServerConnector;
         }
 
-        public List<GroupAccessModel> GetGroupAccessData()
+        public GroupAccessDataResponse GetGroupAccessData()
         {
             var datalist = new List<GroupAccessModel>();
-
+            var response = new GroupAccessDataResponse();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select GroupID, FormID, CreatedBy, CreatedDate from TGroupAccess";
+                    string sql = "";
+                    //string sql = "Select GroupID, FormID, CreatedBy, CreatedDate from TGroupAccess order by GroupID asc";
+
+                    sql = @" 
+                    ;WITH cte AS (
+                        SELECT 
+                            T1.GroupID, 
+		                    T2.GroupDesc,
+		                    T1.CreatedBy,
+                            T1.CreatedDate,
+                            ROW_NUMBER() OVER (PARTITION BY T1.GroupID ORDER BY T1.CreatedDate desc) AS rn
+                        FROM TGroupAccess T1 
+                    inner join TGroup T2 on T1.GroupID = T2.GroupID
+                    )
+                    SELECT 
+                        GroupID,
+	                    GroupDesc,
+	                    CreatedBy,
+	                    CreatedDate
+                    FROM cte
+                    WHERE rn = 1; ";
 
                     datalist = con.Query<GroupAccessModel>(sql).AsList();
-                    return datalist;
+
+                    if (datalist != null)
+                    {
+                        response.IsSuccess = true;
+                        response.Content = datalist;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "get Group Access data error!";
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
+            return response;
         }
 
-        public bool InsertGroupAccessData(IEnumerable<GroupAccessModel> _groupAccessModelList)
+        public GroupAccessDataResponse GetGroupAccessDetailData(string groupID)
         {
-            bool success = false;
+            var datalist = new List<GroupAccessModel>();
+            var response = new GroupAccessDataResponse();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = "Select GroupID, FormID from TGroupAccess where GroupID = @GroupID order by GroupID asc";
 
+                    datalist = con.Query<GroupAccessModel>(sql, new { GroupID = groupID }).AsList();
+
+                    if (datalist != null)
+                    {
+                        response.IsSuccess = true;
+                        response.Content = datalist;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "get Group Access data error!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+            return response;
+        }
+
+        public ResponseBaseModel InsertGroupAccessData(IEnumerable<GroupAccessModel> _groupAccessModelList)
+        {
+            var response = new ResponseBaseModel();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
@@ -60,21 +127,21 @@ namespace SOSMED_API.Services
                             con.Execute(sql, data, transaction: conTrans);
                         }
                         conTrans.Commit();
-                        success = true;
+                        response.IsSuccess = true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
-            return success;
+            return response;
         }
 
-        public bool DeleteGroupAccessData(string groupID)
+        public ResponseBaseModel DeleteGroupAccessData(string groupID)
         {
-            bool success = false;
-
+            var response = new ResponseBaseModel();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
@@ -86,15 +153,21 @@ namespace SOSMED_API.Services
 
                     if (result > 0)
                     {
-                        success = true;
+                        response.IsSuccess = true;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Delete data Group Access failed!";
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
-            return success;
+            return response;
         }
     }
 }

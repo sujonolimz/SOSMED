@@ -1,12 +1,14 @@
 ﻿using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Interface
 {
     public interface IUser
     {
-        List<UserModel> GetUserData();
-        bool InsertUserData(UserModel _userModel);
-        bool UpdateUserData(UserModel _userModel);
-        bool DeleteUserData(string userID);
+        UserDataResponse GetUserData();
+        ResponseBaseModel InsertUserData(UserModel _userModel);
+        ResponseBaseModel UpdateUserData(UserModel _userModel);
+        ResponseBaseModel DeleteUserData(string userID);
     }
 }

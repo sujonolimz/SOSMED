@@ -1,12 +1,14 @@
 ﻿using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Interface
 {
     public interface IPostLimit
     {
-        List<PostLimitModel> GetPostLimitData();
-        bool InsertPostLimitData(PostLimitModel _postLimitModel);
-        bool UpdatePostLimitData(PostLimitModel _postLimitModel);
-        bool DeletePostLimitData(string postLimitID);
+        PostLimitDataResponse GetPostLimitData();
+        ResponseBaseModel InsertPostLimitData(PostLimitModel _postLimitModel);
+        ResponseBaseModel UpdatePostLimitData(PostLimitModel _postLimitModel);
+        ResponseBaseModel DeletePostLimitData(string postLimitID);
     }
 }

@@ -1,12 +1,14 @@
 ﻿using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Interface
 {
     public interface IPosting
     {
-        List<PostingModel> GetPostingData();
-        bool InsertPostingData(PostingModel _postingModel);
-        bool UpdatePostingData(PostingModel _postingModel);
-        bool DeletePostingData(string PostingID);
+        PostingDataResponse GetPostingData();
+        ResponseBaseModel InsertPostingData(PostingModel _postingModel);
+        ResponseBaseModel UpdatePostingData(PostingModel _postingModel);
+        ResponseBaseModel DeletePostingData(string PostingID);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SOSMED_API.Interface;
 using SOSMED_API.Models;
+using SOSMED_API.Services;
 
 namespace SOSMED_API.Controllers
 {
@@ -21,9 +22,8 @@ namespace SOSMED_API.Controllers
         [Route("GetData")]
         public IActionResult GetGroupData()
         {
-            List<GroupModel> dataTable = _groupService.GetGroupData();
-
-            return Ok(dataTable);
+            var result = _groupService.GetGroupData();
+            return Ok(result);
         }
 
         [Authorize]
@@ -31,20 +31,8 @@ namespace SOSMED_API.Controllers
         [Route("InsertData")]
         public IActionResult InsertGroupData(GroupModel groupModel)
         {
-            try
-            {
-                bool isSuccess = _groupService.InsertGroupData(groupModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _groupService.InsertGroupData(groupModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -52,20 +40,8 @@ namespace SOSMED_API.Controllers
         [Route("UpdateData")]
         public IActionResult UpdateGroupData(GroupModel groupModel)
         {
-            try
-            {
-                bool isSuccess = _groupService.UpdateGroupData(groupModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _groupService.UpdateGroupData(groupModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -73,20 +49,8 @@ namespace SOSMED_API.Controllers
         [Route("DeleteData")]
         public IActionResult DeleteGroupData(string groupID)
         {
-            try
-            {
-                bool isSuccess = _groupService.DeleteGroupData(groupID);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _groupService.DeleteGroupData(groupID);
+            return Ok(result);
         }
     }
 }

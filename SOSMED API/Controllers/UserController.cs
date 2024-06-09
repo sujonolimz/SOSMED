@@ -21,9 +21,8 @@ namespace SOSMED_API.Controllers
         [Route("GetData")]
         public IActionResult GetFormData()
         {
-            List<UserModel> dataTable = _userService.GetUserData();
-
-            return Ok(dataTable);
+            var result = _userService.GetUserData();
+            return Ok(result);
         }
 
         [Authorize]
@@ -31,20 +30,8 @@ namespace SOSMED_API.Controllers
         [Route("InsertData")]
         public IActionResult InsertUserData(UserModel userModel)
         {
-            try
-            {
-                bool isSuccess = _userService.InsertUserData(userModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _userService.InsertUserData(userModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -52,20 +39,8 @@ namespace SOSMED_API.Controllers
         [Route("UpdateData")]
         public IActionResult UpdateUserData(UserModel userModel)
         {
-            try
-            {
-                bool isSuccess = _userService.UpdateUserData(userModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _userService.UpdateUserData(userModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -73,20 +48,8 @@ namespace SOSMED_API.Controllers
         [Route("DeleteData")]
         public IActionResult DeleteUserData(string userID)
         {
-            try
-            {
-                bool isSuccess = _userService.DeleteUserData(userID);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _userService.DeleteUserData(userID);
+            return Ok(result);
         }
     }
 }

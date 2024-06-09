@@ -1,12 +1,14 @@
 ﻿using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Interface
 {
     public interface IForm
     {
-        List<FormModel> GetFormData();
-        bool InsertFormData(FormModel _formModel);
-        bool UpdateFormData(FormModel _formModel);
-        bool DeleteFormData(string formID);
+        FormDataResponse GetFormData();
+        ResponseBaseModel InsertFormData(FormModel _formModel);
+        ResponseBaseModel UpdateFormData(FormModel _formModel);
+        ResponseBaseModel DeleteFormData(string formID);
     }
 }

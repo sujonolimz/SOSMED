@@ -21,9 +21,17 @@ namespace SOSMED_API.Controllers
         [Route("GetData")]
         public IActionResult GetGroupAccessData()
         {
-            List<GroupAccessModel> dataTable = _groupAccessService.GetGroupAccessData();
+            var result = _groupAccessService.GetGroupAccessData();
+            return Ok(result);
+        }
 
-            return Ok(dataTable);
+        [Authorize]
+        [HttpGet]
+        [Route("GetDetailData")]
+        public IActionResult GetGroupAccessDetailData(string groupID)
+        {
+            var result = _groupAccessService.GetGroupAccessDetailData(groupID);
+            return Ok(result);
         }
 
         [Authorize]
@@ -31,20 +39,8 @@ namespace SOSMED_API.Controllers
         [Route("InsertData")]
         public IActionResult InsertGroupAccessData(IEnumerable<GroupAccessModel> groupAccessModelList)
         {
-            try
-            {
-                bool isSuccess = _groupAccessService.InsertGroupAccessData(groupAccessModelList);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _groupAccessService.InsertGroupAccessData(groupAccessModelList);
+            return Ok(result);
         }
 
         [Authorize]
@@ -52,20 +48,8 @@ namespace SOSMED_API.Controllers
         [Route("DeleteData")]
         public IActionResult DeleteGroupAccessData(string groupID)
         {
-            try
-            {
-                bool isSuccess = _groupAccessService.DeleteGroupAccessData(groupID);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _groupAccessService.DeleteGroupAccessData(groupID);
+            return Ok(result);
         }
     }
 }

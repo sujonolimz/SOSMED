@@ -1,12 +1,14 @@
 ﻿using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Interface
 {
     public interface IGroup
     {
-        List<GroupModel> GetGroupData();
-        bool InsertGroupData(GroupModel _groupModel);
-        bool UpdateGroupData(GroupModel _groupModel);
-        bool DeleteGroupData(string groupID);
+        GroupDataResponse GetGroupData();
+        ResponseBaseModel InsertGroupData(GroupModel _groupModel);
+        ResponseBaseModel UpdateGroupData(GroupModel _groupModel);
+        ResponseBaseModel DeleteGroupData(string groupID);
     }
 }

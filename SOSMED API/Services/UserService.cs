@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using SOSMED_API.Helpers;
 using SOSMED_API.Interface;
 using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
+using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Services
 {
@@ -15,58 +17,88 @@ namespace SOSMED_API.Services
             _sqlserverconnector = sqlServerConnector;
         }
 
-        public List<UserModel> GetUserData()
+        public UserDataResponse GetUserData()
         {
             var datalist = new List<UserModel>();
-
+            var response = new UserDataResponse();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select UserID, UserName, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser";
+                    string sql = "Select UserID, UserName, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser order by UserID asc";
 
                     datalist = con.Query<UserModel>(sql).AsList();
-                    return datalist;
+                  
+                    if (datalist != null)
+                    {
+                        response.IsSuccess = true;
+                        response.Content = datalist;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "get User data error!";
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
+            return response;
         }
 
-        public bool InsertUserData(UserModel _userModel)
+        public ResponseBaseModel InsertUserData(UserModel _userModel)
         {
-            bool success = false;
-
+            var response = new ResponseBaseModel();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = @"Insert into TUser (UserID, UserName, Password, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate)
+                    string sql = "";
+
+                    // Check is data exist
+                    sql = @"select UserID from TUser where UserID = @UserID";
+                    var existingData = con.QueryFirstOrDefault(sql, new { _userModel.UserID });
+
+                    if (existingData != null)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = string.Format("Data already exist with User ID '{0}'!", _userModel.UserID);
+                        return response;
+                    }
+
+                    // Insert data to database
+                    sql = @"Insert into TUser (UserID, UserName, Password, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate)
                                 values (@UserID, @UserName, PWDENCRYPT(@Password), @Dept, @GroupID, @PostLimitID, @CreatedBy, CURRENT_TIMESTAMP) ";
 
                     var result = con.Execute(sql, _userModel);
 
                     if (result > 0)
                     {
-                        success = true;
+                        response.IsSuccess = true;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Insert data User failed!";
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
-            return success;
+            return response;
         }
 
-        public bool UpdateUserData(UserModel _userModel)
+        public ResponseBaseModel UpdateUserData(UserModel _userModel)
         {
-            bool success = false;
-
+            var response = new ResponseBaseModel();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
@@ -78,6 +110,11 @@ namespace SOSMED_API.Services
                     if (!_userModel.UserName.IsNullOrEmpty())
                     {
                         sql += ", UserName = @UserName ";
+                    }
+
+                    if (!_userModel.Password.IsNullOrEmpty())
+                    {
+                        sql += ", Password = pwdencrypt(@Password) ";
                     }
 
                     if (!_userModel.Dept.IsNullOrEmpty())
@@ -101,21 +138,26 @@ namespace SOSMED_API.Services
 
                     if (result > 0)
                     {
-                        success = true;
+                        response.IsSuccess = true;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Update data User failed!";
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
-            return success;
+            return response;
         }
 
-        public bool DeleteUserData(string userID)
+        public ResponseBaseModel DeleteUserData(string userID)
         {
-            bool success = false;
-
+            var response = new ResponseBaseModel();
             try
             {
                 using (var con = _sqlserverconnector.GetConnection())
@@ -127,15 +169,21 @@ namespace SOSMED_API.Services
 
                     if (result > 0)
                     {
-                        success = true;
+                        response.IsSuccess = true;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Delete data User failed!";
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
-            return success;
+            return response;
         }
     }
 }

@@ -21,9 +21,8 @@ namespace SOSMED_API.Controllers
         [Route("GetData")]  
         public IActionResult GetFormData()
         {
-            List<FormModel> dataTable = _formService.GetFormData();
-
-            return Ok(dataTable);
+            var result = _formService.GetFormData();
+            return Ok(result);
         }
 
         [Authorize]
@@ -31,20 +30,8 @@ namespace SOSMED_API.Controllers
         [Route("InsertData")]
         public IActionResult InsertFormData(FormModel formModel)
         {
-            try
-            {
-                bool isSuccess = _formService.InsertFormData(formModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _formService.InsertFormData(formModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -52,20 +39,8 @@ namespace SOSMED_API.Controllers
         [Route("UpdateData")]
         public IActionResult UpdateFormData(FormModel formModel)
         {
-            try
-            {
-                bool isSuccess = _formService.UpdateFormData(formModel);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _formService.UpdateFormData(formModel);
+            return Ok(result);
         }
 
         [Authorize]
@@ -73,20 +48,8 @@ namespace SOSMED_API.Controllers
         [Route("DeleteData")]
         public IActionResult DeleteFormData(string formID)
         {
-            try
-            {
-                bool isSuccess = _formService.DeleteFormData(formID);
-                if (isSuccess)
-                {
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            // default return statement for cases where no exception is caught
-            return StatusCode(500, "An unexpected error occurred.");
+            var result = _formService.DeleteFormData(formID);
+            return Ok(result);
         }
     }
 }

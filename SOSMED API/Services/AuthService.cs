@@ -2,6 +2,7 @@
 using SOSMED_API.Helpers;
 using SOSMED_API.Interface;
 using SOSMED_API.Models;
+using SOSMED_API.Models.Commons;
 using static SOSMED_API.Models.Responses.ResponseModel;
 
 namespace SOSMED_API.Services
@@ -31,6 +32,14 @@ namespace SOSMED_API.Services
                     // Generate Token
                     var token = _tokenService.GenerateToken(response.UserData);
                     response.UserData.Token = token;
+
+                    // Insert Login history
+                    var LoginHistory = InsertUserLoginHistoryData(userID);
+                    if (!LoginHistory.IsSuccess)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = LoginHistory.Message;
+                    }
                 }
             }
             catch (Exception ex)
@@ -62,7 +71,7 @@ namespace SOSMED_API.Services
                     else
                     {
                         response.IsSuccess = false;
-                        response.Message = "Invalid user ID or password";
+                        response.Message = "Invalid User ID or Password";
                     }
                 }
             }
@@ -72,6 +81,40 @@ namespace SOSMED_API.Services
                 response.Message = $"An error occurred: {ex.Message}";
             }
 
+            return response;
+        }
+
+        public ResponseBaseModel InsertUserLoginHistoryData(string userID)
+        {
+            var response = new ResponseBaseModel();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = "";
+
+                    // Insert data to database
+                    sql = @"Insert into TLoginHistory (UserID, LoginTime) values(@UserID, CURRENT_TIMESTAMP) ";
+
+                    var result = con.Execute(sql, new { UserID = userID });
+
+                    if (result > 0)
+                    {
+                        response.IsSuccess = true;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Insert data User Login history failed!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
             return response;
         }
 
