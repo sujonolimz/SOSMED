@@ -18,4 +18,10 @@ namespace SOSMED_API.Models
         public string Token { get; set; }
         public int ExpiryInMinutes { get; set; }
     }
+
+    public class CheckIsHaveAccess
+    {
+        public string UserID { get; set; }
+        public string FormID { get; set; }
+    }
 }

@@ -11,4 +11,9 @@ namespace SOSMED_API.Models
         public string? PostLimitID { get; set; }
         public string? Dept { get; set; }
     }
+
+    public class MAUsModel : ResponseBaseModel
+    {
+        public int TotalMAUs { get; set; }
+    }
 }

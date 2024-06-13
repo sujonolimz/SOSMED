@@ -25,7 +25,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select PostingID, Title, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TPosting";
+                    string sql = "Select PostingID, Title, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TPosting order by CreatedDate desc";
 
                     datalist = con.Query<PostingModel>(sql).AsList();
 
@@ -73,9 +73,12 @@ namespace SOSMED_API.Services
                     var isAllowCreatePost = CheckPostingLimit(_postingModel.CreatedBy);
                     if (isAllowCreatePost != null)
                     {
-                        response.IsSuccess = false;
-                        response.Message = isAllowCreatePost.Message;
-                        return response;
+                        if (!isAllowCreatePost.IsSuccess)
+                        {
+                            response.IsSuccess = false;
+                            response.Message = isAllowCreatePost.Message;
+                            return response;
+                        }
                     }
 
                     // Insert data to database

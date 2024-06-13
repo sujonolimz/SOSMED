@@ -118,5 +118,37 @@ namespace SOSMED_API.Services
             return response;
         }
 
+        public ResponseBaseModel isHaveFormAccess(CheckIsHaveAccess model)
+        {
+            var response = new ResponseBaseModel();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = "";
+
+                    sql = @"declare @groupID nvarchar(50) = (select GroupID from TUser where UserID = @UserID) 
+                    select GroupID, FormID from TGroupAccess where GroupID = @groupID and FormID = @FormID ";
+
+                    var existingData = con.QueryFirstOrDefault(sql, new { UserID = model.UserID, FormID = model.FormID });
+
+                    if (existingData == null)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = string.Format("Your user id not have access to form '{0}'!", model.FormID);
+                        return response;
+                    }
+
+                    response.IsSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+            return response;
+        }
     }
 }

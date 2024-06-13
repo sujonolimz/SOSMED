@@ -185,5 +185,45 @@ namespace SOSMED_API.Services
             }
             return response;
         }
+
+        public MAUsModel GetTotalMAUs()
+        {
+            var datalist = new List<UserModel>();
+            var response = new MAUsModel();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = @";with cte as (
+                    select COUNT(T1.UserID) as total_login, T1.UserID from TLoginHistory T1
+                    inner join TUser T2 on T1.UserID = T2.UserID
+                    where YEAR(T1.LoginTime) = YEAR(GETDATE())
+                    and MONTH(T1.LoginTime) = MONTH(GETDATE())
+                    group by T1.UserID
+                    )
+                    select COUNT(UserID) as TotalMAUs from cte ";
+
+                    var totalData = con.ExecuteScalar(sql);
+
+                    if (totalData != null)
+                    {
+                        response.IsSuccess = true;
+                        response.TotalMAUs = Convert.ToInt32(totalData);
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "GetTotalMAUs data error!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+            return response;
+        }
     }
 }

@@ -51,5 +51,13 @@ namespace SOSMED_API.Controllers
             var result = _userService.DeleteUserData(userID);
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("GetTotalMAUs")]
+        public IActionResult GetTotalMAUs()
+        {
+            var result = _userService.GetTotalMAUs();
+            return Ok(result);
+        }
     }
 }

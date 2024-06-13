@@ -27,5 +27,13 @@ namespace SOSMED_API.Controllers
             var result = _authService.Login(model.UserID, model.Password);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("isHaveFormAccess")]
+        public IActionResult isHaveFormAccess(CheckIsHaveAccess model)
+        {
+            var result = _authService.isHaveFormAccess(model);
+            return Ok(result);
+        }
     }
 }
