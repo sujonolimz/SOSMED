@@ -52,11 +52,21 @@ namespace SOSMED_API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetTotalMAUs")]
         public IActionResult GetTotalMAUs()
         {
             var result = _userService.GetTotalMAUs();
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetUserLoginHistoryData")]
+        public IActionResult GetUserLoginHistoryData(string year, string month)
+        {
+            var result = _userService.GetUserLoginHistoryData(year, month);
             return Ok(result);
         }
     }

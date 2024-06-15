@@ -29,7 +29,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select FormID, FormDesc, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TForm order by FormID asc";
+                    string sql = "Select ROW_NUMBER() over (order by FormID asc) as 'No', FormID, FormDesc, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TForm order by FormID asc";
 
                     datalist = con.Query<FormModel>(sql).AsList();
 
@@ -151,6 +151,39 @@ namespace SOSMED_API.Services
                         response.IsSuccess = false;
                         response.Message = "Delete data Form failed!";
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+            return response;
+        }
+
+        public FormDescDataResponse GetFormDesc(string formID)
+        {
+            var response = new FormDescDataResponse();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = "";
+
+                    sql = @"select FormDesc from TForm where FormID = @FormID ";
+
+                    var formDesc = con.ExecuteScalar(sql, new { FormID = formID });
+
+                    if (Convert.ToString(formDesc) == "")
+                    {
+                        response.IsSuccess = false;
+                        response.Message = string.Format("get Form Description failed for Form ID '{0}'", formID);
+                        return response;
+                    }
+
+                    response.IsSuccess = true;
+                    response.FormDesc = formDesc.ToString();
                 }
             }
             catch (Exception ex)

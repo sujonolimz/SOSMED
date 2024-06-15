@@ -16,7 +16,7 @@ namespace SOSMED_API.Services
             _sqlserverconnector = sqlServerConnector;
         }
 
-        public PostingDataResponse GetPostingData()
+        public PostingDataResponse GetPostingData(string userID)
         {
             var datalist = new List<PostingModel>();
             var response = new PostingDataResponse();
@@ -25,9 +25,23 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select PostingID, Title, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TPosting order by CreatedDate desc";
+                    string sql = @"
+                    declare @userDept nvarchar(50) = (select Dept from TUser where UserID = @userID)
 
-                    datalist = con.Query<PostingModel>(sql).AsList();
+                    if (@userDept = 'Admin')
+                    begin
+	                    Select ROW_NUMBER() over (order by CreatedDate desc) as 'No', PostingID, Title, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate 
+	                    from TPosting 
+	                    order by CreatedDate desc
+                    end
+                    else begin
+	                    Select ROW_NUMBER() over (order by CreatedDate desc) as 'No', PostingID, Title, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate 
+	                    from TPosting 
+	                    where CreatedBy = @userID
+	                    order by CreatedDate desc
+                    end ";
+
+                    datalist = con.Query<PostingModel>(sql, new { userID = userID }).AsList();
 
                     if (datalist != null)
                     {

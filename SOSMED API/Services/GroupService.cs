@@ -25,7 +25,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select GroupID, GroupDesc, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TGroup order by GroupID asc";
+                    string sql = "Select ROW_NUMBER() over (order by GroupID asc) as 'No', GroupID, GroupDesc, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TGroup order by GroupID asc";
 
                     datalist = con.Query<GroupModel>(sql).AsList();
 

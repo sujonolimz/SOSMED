@@ -38,5 +38,15 @@ namespace SOSMED_API.Models.Responses
         {
             public List<UserModel> Content { get; set; }
         }
+
+        public class UserLoginHistoryDataResponse : ResponseBaseModel
+        {
+            public List<LoginHistoryModel> Content { get; set; }
+        }
+
+        public class FormDescDataResponse : ResponseBaseModel
+        {
+            public string FormDesc { get; set; }
+        }
     }
 }

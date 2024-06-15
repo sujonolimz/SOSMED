@@ -26,7 +26,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select UserID, UserName, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser order by UserID asc";
+                    string sql = "Select ROW_NUMBER() over (order by UserID asc) as 'No', UserID, UserName, Dept, GroupID, PostLimitID, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TUser order by UserID asc";
 
                     datalist = con.Query<UserModel>(sql).AsList();
                   
@@ -188,7 +188,6 @@ namespace SOSMED_API.Services
 
         public MAUsModel GetTotalMAUs()
         {
-            var datalist = new List<UserModel>();
             var response = new MAUsModel();
             try
             {
@@ -215,6 +214,43 @@ namespace SOSMED_API.Services
                     {
                         response.IsSuccess = false;
                         response.Message = "GetTotalMAUs data error!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+            return response;
+        }
+
+        public UserLoginHistoryDataResponse GetUserLoginHistoryData(string year, string month)
+        {
+            var datalist = new List<LoginHistoryModel>();
+            var response = new UserLoginHistoryDataResponse();
+            try
+            {
+                using (var con = _sqlserverconnector.GetConnection())
+                {
+                    con.Open();
+                    string sql = @"
+                    select ROW_NUMBER() over (order by T1.LoginTime desc) as 'No', T1.ID, T1.UserID, T2.UserName, T1.LoginTime from TLoginHistory T1
+                    inner join TUser T2 on T1.UserID = T2.UserID 
+                    where YEAR(T1.LoginTime) = @year and MONTH(T1.LoginTime) = @month 
+                    order by T1.LoginTime desc ";
+
+                    datalist = con.Query<LoginHistoryModel>(sql, new {year = year, month = month}).AsList();
+
+                    if (datalist != null)
+                    {
+                        response.IsSuccess = true;
+                        response.Content = datalist;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "get User Login History data error!";
                     }
                 }
             }

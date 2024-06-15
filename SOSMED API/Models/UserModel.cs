@@ -16,4 +16,13 @@ namespace SOSMED_API.Models
     {
         public int TotalMAUs { get; set; }
     }
+
+    public class LoginHistoryModel
+    {
+        public int? No { get; set; }
+        public string ID { get; set;}
+        public string UserID { get; set;}
+        public string UserName { get; set; }
+        public DateTime LoginTime { get; set; }
+    }
 }

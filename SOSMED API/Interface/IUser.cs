@@ -11,5 +11,6 @@ namespace SOSMED_API.Interface
         ResponseBaseModel UpdateUserData(UserModel _userModel);
         ResponseBaseModel DeleteUserData(string userID);
         MAUsModel GetTotalMAUs();
+        UserLoginHistoryDataResponse GetUserLoginHistoryData(string year, string month);
     }
 }

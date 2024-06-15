@@ -10,5 +10,6 @@ namespace SOSMED_API.Interface
         ResponseBaseModel InsertFormData(FormModel _formModel);
         ResponseBaseModel UpdateFormData(FormModel _formModel);
         ResponseBaseModel DeleteFormData(string formID);
+        FormDescDataResponse GetFormDesc(string formID);
     }
 }

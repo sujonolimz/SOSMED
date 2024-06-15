@@ -51,5 +51,14 @@ namespace SOSMED_API.Controllers
             var result = _formService.DeleteFormData(formID);
             return Ok(result);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetFormDesc")]
+        public IActionResult GetFormDesc(string formID)
+        {
+            var result = _formService.GetFormDesc(formID);
+            return Ok(result);
+        }
     }
 }

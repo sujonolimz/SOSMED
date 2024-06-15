@@ -25,7 +25,7 @@ namespace SOSMED_API.Services
                 using (var con = _sqlserverconnector.GetConnection())
                 {
                     con.Open();
-                    string sql = "Select PostLimitID, PostLimitValue, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TPostLimit order by PostLimitID asc";
+                    string sql = "Select ROW_NUMBER() over (order by PostLimitID asc) as 'No', PostLimitID, PostLimitValue, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate from TPostLimit order by PostLimitID asc";
 
                     datalist = con.Query<PostLimitModel>(sql).AsList();
                  

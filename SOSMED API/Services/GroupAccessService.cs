@@ -41,12 +41,13 @@ namespace SOSMED_API.Services
                     inner join TGroup T2 on T1.GroupID = T2.GroupID
                     )
                     SELECT 
+                        ROW_NUMBER() over (order by GroupID asc) as 'No',
                         GroupID,
 	                    GroupDesc,
 	                    CreatedBy,
 	                    CreatedDate
                     FROM cte
-                    WHERE rn = 1; ";
+                    WHERE rn = 1 order by GroupID; ";
 
                     datalist = con.Query<GroupAccessModel>(sql).AsList();
 

@@ -6,7 +6,7 @@ namespace SOSMED_API.Interface
 {
     public interface IPosting
     {
-        PostingDataResponse GetPostingData();
+        PostingDataResponse GetPostingData(string userID);
         ResponseBaseModel InsertPostingData(PostingModel _postingModel);
         ResponseBaseModel UpdatePostingData(PostingModel _postingModel);
         ResponseBaseModel DeletePostingData(string PostingID);

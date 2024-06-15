@@ -20,9 +20,9 @@ namespace SOSMED_API.Controllers
         [Authorize]
         [HttpGet]
         [Route("GetData")]
-        public IActionResult GetFormData()
+        public IActionResult GetFormData(string userID)
         {
-            var result = _postingService.GetPostingData();
+            var result = _postingService.GetPostingData(userID);
             return Ok(result);
         }
 
